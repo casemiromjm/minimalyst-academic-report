@@ -6,8 +6,8 @@ entrypoint = "lib.typ"
 repository = "https://github.com/casemiromjm/report-template"
 authors = ["Casemiro Melo <https://casemiromjm.me>"]
 license = "MIT-0"
-description = "Typst template reports done in academic context."
-keywords = ["feup", "academic", "report", "clean"]
+description = "Typst template report for documents done in academic context."
+keywords = ["feup", "academic", "report", "clean", "university"]
 categories = ["report"]
 
 [template]
