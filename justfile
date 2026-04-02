@@ -15,7 +15,12 @@ watch:
 package target:
   @./scripts/package.sh "{{target}}"
 
-# install the library with the "@local" prefix
+# install the library with the "@local" prefix (AUTORELOAD due to symlink)
+[group: "build"]
+local:
+  @./scripts/local.sh
+
+# install the library with the "@local" prefix (DOES NOT AUTORELOAD)
 [group: "build"]
 install: (package "@local")
 
