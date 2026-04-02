@@ -1,54 +1,148 @@
 #let report(
-  title: "Typst IFSC",
-  subtitle: none,
-  authors: ("Gabriel Luiz Espindola Pedro",),
-  date: none,
+  title: "A Report Template",
+  subtitle: "",
+  authors: (
+    (
+      name: "John Doe",
+      number: "",
+    ),
+  ),
+  font: "",
+  font-size: 11pt,
+  lang: "en",
+  date: "",
+  sans: true,
+  cover-image: none,
+  paper: "a4",
+  line-spacing: 1,
+  table-of-contents: true,
+  table-of-figures: false,
   doc,
 ) = {
-  // Define metadados do documento
-  set document(title: title, author: authors)
+
+  // metadata
+  set document(title: title, author: authors.map(a => a.name))
+
+  set text(
+    font: 
+      if (font != "") {
+        font
+      } else {
+        if sans {"Liberation Sans"} else {"Libertinus Serif"}
+      }
+    ,
+    size: font-size,
+    lang: lang,
+
+    ligatures: false
+  )
+
+  // COVER
 
   set page(
-    numbering: "1",
-    paper: "a4",
-    margin: (top: 3cm, bottom: 2cm, left: 3cm, right: 2cm),
+    numbering: none,
+    paper: paper,
   )
-  set text(size: 12pt)
-  // TODO: verificar se há necessidade de colocar espaçamento de 1.5
+  
   set par(
-    first-line-indent: 1.5cm,
+    first-line-indent: (amount: 0.5in, all: true),
     justify: true,
-    leading: 0.65em,
+    leading: line-spacing*0.65em,
+    spacing: 0.65em,
     linebreaks: "optimized",
   )
+
+  set block(spacing: 1.2em)
+
   set heading(numbering: "1.")
   set math.equation(numbering: "(1)")
+  set figure(numbering: "(1)")
 
-  align(center)[
-    #image("assets/ifsc-v.png", width: 10em)
-  ]
+  show heading: set block(below: 1em)
 
-  align(horizon + center)[
-    #text(20pt, title, weight: "bold")
-    #v(1em)
-    #text(subtitle, weight: "regular")
-  ]
+  show ref: it => highlight(fill: rgb("fff3a1"), it)
 
-  align(bottom + left)[
-    #text(list(..authors, marker: "", body-indent: 0pt), weight: "semibold")
-    #text(date)
-  ]
-
-  pagebreak()
-
-  show outline.entry.where(level: 1): it => {
-    strong(it)
+  if cover-image != none {
+    align(top + left)[
+      #cover-image
+    ]
   }
 
-  // TODO: Verificar maneira melhor de alterar espaçamento entre titulo e corpo
-  outline(title: [Sumário #v(1em)], indent: 2em)
+  align(horizon + center)[
+    #text(24pt, title, weight: "bold")
+    #v(0.3em)
+    #text(12pt, subtitle, weight: "regular")
+  ]
+
+  v(12em, weak: true)
+  align(horizon + center)[
+    #text(
+      weight: "semibold",
+      list(
+        marker: "",
+        body-indent: 0pt,
+        ..authors.map(a => if a.number != none { [#columns(2, gutter: -10cm)[#a.name #colbreak() #a.number]] } else { a.name }),
+      )
+    )
+  ]
+
+  if date != "" [#align(center + bottom)[#text(date)]]
 
   pagebreak()
+
+  // OTHER PAGES
+
+  set footnote.entry(separator: none)
+  show footnote.entry: set text(size: 0.8em, fill: rgb(0, 0, 0, 80%))
+
+  let footer = context [
+    #line(length: 100%)
+    #set text(0.8em,)
+
+    #grid(
+      columns: (1fr, auto),
+      align: (horizon + left, horizon + right),
+
+      text(fill: rgb(0, 0, 0, 60%))[#title -- #subtitle],
+      counter(page).display()
+    )
+
+  ]
+
+  set page(
+    footer: footer
+  )
+
+  // TABLE OF CONTENTS
+  if table-of-contents == true {
+    {
+      set par(first-line-indent: 0pt)
+
+      show outline.entry.where(level: 1): it => {
+        v(1em, weak: true)
+        strong(it)
+      }
+
+      outline(title: [Table of Contents #v(1em)], indent: auto,)
+      
+      pagebreak()
+    }
+  }
+
+  // TABLE OF FIGURES
+  if table-of-figures == true {
+    {
+      set par(first-line-indent: 0pt)
+
+      outline(
+        title: [Table of Figures #v(1em)],
+        target: figure.where(kind: image),
+        indent: auto,
+      )
+    }
+
+    pagebreak()
+  }
 
   doc
 }

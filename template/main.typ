@@ -1,18 +1,25 @@
-#import "@preview/klaro-ifsc-sj:0.1.0": report
+#import "@preview/minimalyts-academic-report:0.1.0": report
+// #import "@local/minimalyst-academic-report:0.1.0": report
 
 #show: doc => report(
-  title: "Typst IFSC-SJ",
-  subtitle: "Um template para o Typst voltado para",
-  // Se apenas um autor colocar , no final para indicar que é um array
-  authors: ("Gabriel Luiz Espindola Pedro",),
-  date: "13 de Setembro de 2023",
+  title: "Academic Template",
+  subtitle: "A clean template for reports",
+  // if a single author, leave a comma ate the ending to ensure it is an array
+  authors: (
+    (name: "John Doe", number: "424242"),
+    (name: "Jane Doe", number: "424242")
+  ),
+  table-of-contents: true,
+  table-of-figures: true,
+  cover-image: image("../assets/feup.png", width: 40%),
+  date: "02 April 2026",
   doc,
 )
 
 = Soft
 == Close
 === Closest
-@hard #lorem(80)
+@hard: #lorem(80)
 
 == Softest
 
