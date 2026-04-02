@@ -10,11 +10,12 @@
   font: "",
   font_size: 11pt,
   lang: "en",
-  date: none,
+  date: "",
   sans: true,
   cover_image: "",
   paper: "a4",
   line-spacing: 1,
+  table-of-figures: false,
   doc,
 ) = {
 
@@ -44,18 +45,26 @@
   )
   
   set par(
-    first-line-indent: 0.5in,
+    first-line-indent: (amount: 0.5in, all: true),
     justify: true,
     leading: line-spacing*0.65em,
+    spacing: 0.65em,
     linebreaks: "optimized",
   )
 
+  set block(spacing: 1.2em)
+
   set heading(numbering: "1.")
   set math.equation(numbering: "(1)")
+  set figure(numbering: "(1)")
+
+  show heading: set block(below: 1em)
+
+  show ref: it => highlight(fill: rgb("fff3a1"), it)
 
   if cover_image != "" [
     #align(center)[
-      #image("assets/" + cover_image, width: 10em)
+      #image(cover_image, width: 10em)
     ]
   ]
 
@@ -77,7 +86,7 @@
     )
   ]
 
-  align(center + bottom)[#text(date)]
+  if date != "" [#align(center + bottom)[#text(date)]]
 
   pagebreak()
 
@@ -104,13 +113,32 @@
     footer: footer
   )
 
-  show outline.entry.where(level: 1): it => {
-    strong(it)
+  // TABLE OF CONTENTS
+  {
+    set par(first-line-indent: 0pt)
+
+    show outline.entry.where(level: 1): it => {
+      v(1em, weak: true)
+      strong(it)
+    }
+
+    outline(title: [Table of Contents #v(1em)], indent: auto,)
   }
 
-  // TABLE OF CONTENTS
-  // TODO: Verificar maneira melhor de alterar espaçamento entre titulo e corpo
-  outline(title: [Table of Contents #v(1em)], indent: 2em)
+  pagebreak()
+
+  // TABLE OF FIGURES
+  if table-of-figures {
+    {
+      set par(first-line-indent: 0pt)
+
+      outline(
+        title: [Table of Figures #v(1em)],
+        target: figure.where(kind: image),
+        indent: auto,
+      )
+    }
+  }
 
   pagebreak()
 
