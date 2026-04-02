@@ -8,11 +8,11 @@
     ),
   ),
   font: "",
-  font_size: 11pt,
+  font-size: 11pt,
   lang: "en",
   date: "",
   sans: true,
-  cover_image: none,
+  cover-image: none,
   paper: "a4",
   line-spacing: 1,
   table-of-contents: true,
@@ -31,7 +31,7 @@
         if sans {"Liberation Sans"} else {"Libertinus Serif"}
       }
     ,
-    size: font_size,
+    size: font-size,
     lang: lang,
 
     ligatures: false
@@ -62,9 +62,9 @@
 
   show ref: it => highlight(fill: rgb("fff3a1"), it)
 
-  if cover_image != none {
+  if cover-image != none {
     align(top + left)[
-      #cover_image
+      #cover-image
     ]
   }
 
