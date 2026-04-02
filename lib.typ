@@ -1,19 +1,44 @@
 #let report(
-  title: "Typst IFSC",
-  subtitle: none,
-  authors: ("Gabriel Luiz Espindola Pedro",),
+  title: "A Report Template",
+  subtitle: "",
+  authors: (
+    (
+      name: "John Doe",
+      number: "123123123",
+    ),
+  ),
+  font: "",
+  font_size: 11pt,
+  lang: "en",
   date: none,
+  sans: true,
+  cover_image: "",
   doc,
 ) = {
-  // Define metadados do documento
-  set document(title: title, author: authors)
+
+  // metadata
+  set document(title: title, author: authors.map(a => a.name))
+
+  set text(
+    font: 
+      if (font != "") {
+        font
+      } else {
+        if sans {"Liberation Sans"} else {"Libertinus Serif"}
+      }
+    ,
+    size: font_size,
+    lang: lang,
+
+    ligatures: false
+  )
 
   set page(
     numbering: "1",
     paper: "a4",
     margin: (top: 3cm, bottom: 2cm, left: 3cm, right: 2cm),
   )
-  set text(size: 12pt)
+  
   // TODO: verificar se há necessidade de colocar espaçamento de 1.5
   set par(
     first-line-indent: 1.5cm,
@@ -24,9 +49,12 @@
   set heading(numbering: "1.")
   set math.equation(numbering: "(1)")
 
-  align(center)[
-    #image("assets/ifsc-v.png", width: 10em)
+  if cover_image != "" [
+    #align(center)[
+      #image("assets/" + cover_image, width: 10em)
+    ]
   ]
+
 
   align(horizon + center)[
     #text(20pt, title, weight: "bold")
@@ -34,8 +62,16 @@
     #text(subtitle, weight: "regular")
   ]
 
-  align(bottom + left)[
-    #text(list(..authors, marker: "", body-indent: 0pt), weight: "semibold")
+  align(bottom + center)[
+    #text(
+      weight: "semibold",
+      list(
+        marker: "",
+        body-indent: 0pt,
+        ..authors.map(a => if a.number != none { [#a.name -- #a.number] } else { a.name }),
+      )
+    )
+
     #text(date)
   ]
 
