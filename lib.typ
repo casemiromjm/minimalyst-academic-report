@@ -13,6 +13,7 @@
   date: none,
   sans: true,
   cover_image: "",
+  paper: "a4",
   doc,
 ) = {
 
@@ -33,9 +34,11 @@
     ligatures: false
   )
 
+  // COVER
+
   set page(
-    numbering: "1",
-    paper: "a4",
+    numbering: none,
+    paper: paper,
     margin: (top: 3cm, bottom: 2cm, left: 3cm, right: 2cm),
   )
   
@@ -46,6 +49,7 @@
     leading: 0.65em,
     linebreaks: "optimized",
   )
+
   set heading(numbering: "1.")
   set math.equation(numbering: "(1)")
 
@@ -55,34 +59,58 @@
     ]
   ]
 
-
   align(horizon + center)[
     #text(20pt, title, weight: "bold")
-    #v(1em)
+    #v(0.3em)
     #text(subtitle, weight: "regular")
   ]
 
-  align(bottom + center)[
+  v(12em, weak: true)
+  align(horizon + center)[
     #text(
       weight: "semibold",
       list(
         marker: "",
         body-indent: 0pt,
-        ..authors.map(a => if a.number != none { [#a.name -- #a.number] } else { a.name }),
+        ..authors.map(a => if a.number != none { [#columns(2, gutter: -10cm)[#a.name #colbreak() #a.number]] } else { a.name }),
       )
     )
-
-    #text(date)
   ]
 
+  align(center + bottom)[#text(date)]
+
   pagebreak()
+
+  // OTHER PAGES
+
+  set footnote.entry(separator: none)
+  show footnote.entry: set text(size: 0.8em, fill: rgb(0, 0, 0, 80%))
+
+  let footer = context [
+    #line(length: 100%)
+    #set text(0.8em,)
+
+    #grid(
+      columns: (1fr, auto),
+      align: (horizon + left, horizon + right),
+
+      text(fill: rgb(0, 0, 0, 60%))[#title -- #subtitle],
+      counter(page).display()
+    )
+
+  ]
+
+  set page(
+    footer: footer
+  )
 
   show outline.entry.where(level: 1): it => {
     strong(it)
   }
 
+  // TABLE OF CONTENTS
   // TODO: Verificar maneira melhor de alterar espaçamento entre titulo e corpo
-  outline(title: [Sumário #v(1em)], indent: 2em)
+  outline(title: [Table of Contents #v(1em)], indent: 2em)
 
   pagebreak()
 
