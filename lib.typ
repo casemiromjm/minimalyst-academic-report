@@ -12,9 +12,10 @@
   lang: "en",
   date: "",
   sans: true,
-  cover_image: "",
+  cover_image: none,
   paper: "a4",
   line-spacing: 1,
+  table-of-contents: true,
   table-of-figures: false,
   doc,
 ) = {
@@ -41,7 +42,6 @@
   set page(
     numbering: none,
     paper: paper,
-    margin: (top: 3cm, bottom: 2cm, left: 3cm, right: 2cm),
   )
   
   set par(
@@ -62,11 +62,11 @@
 
   show ref: it => highlight(fill: rgb("fff3a1"), it)
 
-  if cover_image != "" [
-    #align(center)[
-      #image(cover_image, width: 10em)
+  if cover_image != none {
+    align(top + left)[
+      #cover_image
     ]
-  ]
+  }
 
   align(horizon + center)[
     #text(24pt, title, weight: "bold")
@@ -114,21 +114,23 @@
   )
 
   // TABLE OF CONTENTS
-  {
-    set par(first-line-indent: 0pt)
+  if table-of-contents == true {
+    {
+      set par(first-line-indent: 0pt)
 
-    show outline.entry.where(level: 1): it => {
-      v(1em, weak: true)
-      strong(it)
+      show outline.entry.where(level: 1): it => {
+        v(1em, weak: true)
+        strong(it)
+      }
+
+      outline(title: [Table of Contents #v(1em)], indent: auto,)
+      
+      pagebreak()
     }
-
-    outline(title: [Table of Contents #v(1em)], indent: auto,)
   }
 
-  pagebreak()
-
   // TABLE OF FIGURES
-  if table-of-figures {
+  if table-of-figures == true {
     {
       set par(first-line-indent: 0pt)
 
@@ -138,9 +140,9 @@
         indent: auto,
       )
     }
-  }
 
-  pagebreak()
+    pagebreak()
+  }
 
   doc
 }
