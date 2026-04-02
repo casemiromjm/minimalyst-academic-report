@@ -4,7 +4,7 @@
   authors: (
     (
       name: "John Doe",
-      number: "123123123",
+      number: "",
     ),
   ),
   font: "",
@@ -14,6 +14,7 @@
   sans: true,
   cover_image: "",
   paper: "a4",
+  line-spacing: 1,
   doc,
 ) = {
 
@@ -42,11 +43,10 @@
     margin: (top: 3cm, bottom: 2cm, left: 3cm, right: 2cm),
   )
   
-  // TODO: verificar se há necessidade de colocar espaçamento de 1.5
   set par(
-    first-line-indent: 1.5cm,
+    first-line-indent: 0.5in,
     justify: true,
-    leading: 0.65em,
+    leading: line-spacing*0.65em,
     linebreaks: "optimized",
   )
 
@@ -60,9 +60,9 @@
   ]
 
   align(horizon + center)[
-    #text(20pt, title, weight: "bold")
+    #text(24pt, title, weight: "bold")
     #v(0.3em)
-    #text(subtitle, weight: "regular")
+    #text(12pt, subtitle, weight: "regular")
   ]
 
   v(12em, weak: true)
