@@ -3,6 +3,8 @@
 # adapted from https://github.com/johannes-wolf/cetz/blob/35c0868378cea5ad323cc0d9c2f76de8ed9ba5bd/scripts/package
 # licensed under Apache License 2.0
 
+# this scripts came from https://github.com/typst-community/typst-package-template (8cb921f)
+
 # Local package directories per platform
 if [[ "$OSTYPE" == "linux"* ]]; then
   DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}"
